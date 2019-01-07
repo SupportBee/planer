@@ -83,10 +83,10 @@ exports.extractFromHtml = (msgBody, dom) ->
   # checking for others. Possible solution is to use something like compareByDomPosition from htmlPlaner
   # to find the earliest splitter in the DOM.
   haveCutQuotations = (
-    htmlPlaner.cutById(emailDocument) ||
     htmlPlaner.cutMicrosoftQuote(emailDocument) ||
-    htmlPlaner.cutFromBlock(emailDocument)
     htmlPlaner.cutBlockQuote(emailDocument) ||
+    htmlPlaner.cutById(emailDocument) ||
+    htmlPlaner.cutFromBlock(emailDocument) ||
     htmlPlaner.cutGmailQuote(emailDocument)
   )
 
