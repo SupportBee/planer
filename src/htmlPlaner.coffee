@@ -99,6 +99,25 @@ exports.cutMicrosoftQuote = (emailDocument) ->
   parentElement.removeChild(splitterElement)
   return true
 
+exports.wrapMicrosoftQuote = (emailDocument) ->
+  splitterElement = findMicrosoftSplitter(emailDocument)
+  return false unless splitterElement?
+
+  wrapper = emailDocument.createElement('div')
+  wrapper.className = 'gmail_quote'
+  wrapper.appendChild(splitterElement.cloneNode(true))
+
+  parentElement = splitterElement.parentElement
+  afterSplitter = splitterElement.nextElementSibling
+  while afterSplitter?
+    wrapper.appendChild(afterSplitter.cloneNode(true))
+    parentElement.removeChild(afterSplitter)
+    afterSplitter = splitterElement.nextElementSibling
+
+  parentElement.removeChild(splitterElement)
+  parentElement.appendChild(wrapper)
+  return true
+
 # Remove the last non-nested blockquote element
 exports.cutBlockQuote = (emailDocument) ->
   xpathQuery = '(.//blockquote)[not(ancestor::blockquote)][last()]'
@@ -164,6 +183,29 @@ exports.cutFromBlock = (emailDocument) ->
     afterSplitter = textNode.nextSibling
 
   textNode.parentNode.removeChild(textNode)
+  return true
+
+exports.wrapFromBlock = (emailDocument) ->
+  # Handle case where From: block is enclosed in a tag
+  xpathQuery = "//*[starts-with(normalize-space(.), 'From:')]|//*[starts-with(normalize-space(.), 'Date:')]"
+  xpathResult = emailDocument.evaluate(xpathQuery, emailDocument, null, XPathResult.ANY_TYPE, null)
+
+  splitterElement = xpathResult.iterateNext()
+  return false unless splitterElement?
+
+  wrapper = emailDocument.createElement('div')
+  wrapper.className = 'gmail_quote'
+  wrapper.appendChild(splitterElement.cloneNode(true))
+
+  parentElement = splitterElement.parentElement
+  afterSplitter = splitterElement.nextElementSibling
+  while afterSplitter?
+    wrapper.appendChild(afterSplitter.cloneNode(true))
+    parentElement.removeChild(afterSplitter)
+    afterSplitter = splitterElement.nextElementSibling
+
+  parentElement.removeChild(splitterElement)
+  parentElement.appendChild(wrapper)
   return true
 
 findParentDiv = (element) ->
