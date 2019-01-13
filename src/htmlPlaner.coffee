@@ -96,7 +96,7 @@ exports.cutMicrosoftQuote = (emailDocument) ->
     parentElement.removeChild(afterSplitter)
     afterSplitter = splitterElement.nextElementSibling
 
-  parentElement.removeChild(splitterElement)
+  parentElement?.removeChild(splitterElement)
   return true
 
 exports.wrapMicrosoftQuote = (emailDocument) ->
@@ -114,8 +114,8 @@ exports.wrapMicrosoftQuote = (emailDocument) ->
     parentElement.removeChild(afterSplitter)
     afterSplitter = splitterElement.nextElementSibling
 
-  parentElement.removeChild(splitterElement)
-  parentElement.appendChild(wrapper)
+  parentElement?.removeChild(splitterElement)
+  parentElement?.appendChild(wrapper)
   return true
 
 # Remove the last non-nested blockquote element
@@ -204,8 +204,8 @@ exports.wrapFromBlock = (emailDocument) ->
     parentElement.removeChild(afterSplitter)
     afterSplitter = splitterElement.nextElementSibling
 
-  parentElement.removeChild(splitterElement)
-  parentElement.appendChild(wrapper)
+  parentElement?.removeChild(splitterElement)
+  parentElement?.appendChild(wrapper)
   return true
 
 findParentDiv = (element) ->
